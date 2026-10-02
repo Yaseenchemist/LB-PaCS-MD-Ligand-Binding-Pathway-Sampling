@@ -1,0 +1,80 @@
+project:
+  input_complex: complex.pdb
+  workdir: work
+  ligand_resname_override: null
+  pocket_cutoff_A: 5.0
+forcefield:
+  preferred_pattern: charmm36*.ff
+  gmx_ff_name: null
+  water: tip3p
+  termini:
+    mode: charged
+    nterm_regex: NH3\+|NH3
+    cterm_regex: COO-|COO
+swissparam:
+  host: https://www.swissparam.ch:8443
+  approach: both
+  legacy_flag: null
+  poll_seconds: 120
+  timeout_minutes: 90
+  retries: 4
+system:
+  box_type: dodecahedron
+  box_distance_nm: 1.2
+  salt_concentration_M: 0.15
+  water_resnames:
+  - SOL
+  - HOH
+  - WAT
+  - TIP3
+  ion_resnames:
+  - NA
+  - CL
+  - K
+  - CA
+  - MG
+  ligand_posres_fc: 1000
+reference:
+  stable_fraction: 0.5
+  com_percentile: 95.0
+  rmsd_percentile: 95.0
+  min_padding_A: 0.15
+  mad_multiplier: 1.0
+unbound:
+  initial_displacement_A: 12.0
+  displacement_step_A: 2.0
+  max_displacement_A: 30.0
+  min_ligand_pocket_com_increase_A: 8.0
+  severe_clash_A: 1.8
+  delete_water_if_within_A: 2.2
+pacs:
+  replicas: 5
+  short_md_ps: 100.0
+  dt_ps: 0.002
+  frame_stride_ps: 1.0
+  max_cycles: 100
+  convergence_window: 5
+  plateau_tolerance_A: 0.35
+  use_pose_rmsd: true
+  random_seed_base: 410000
+  cleanup_losers: true
+production:
+  length_ns: 100.0
+  dt_ps: 0.002
+  trajectory_stride_ps: 10.0
+  checkpoint_minutes: 15
+execution:
+  profile: auto
+  gmx: gmx
+  local_threads: 8
+  local_parallel_replicas: 1
+  slurm:
+    module: GROMACS/2025.3-foss-2025a-CUDA-12.9.1
+    account: YOUR_PROJECT_ID
+    partition: gpu
+    gres: gpu:1
+    nodes: 1
+    ntasks: 1
+    cpus_per_task: 16
+    time: '24:00:00'
+    poll_seconds: 30
